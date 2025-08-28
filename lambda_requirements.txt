@@ -1,0 +1,7 @@
+fastapi==0.104.1
+markitdown[all]==0.0.1a4
+mangum==0.17.0
+pydantic==2.5.0
+httpx==0.25.2
+python-magic==0.4.27
+psutil==5.9.6

@@ -1,0 +1,31 @@
+service: markitdown-converter
+
+provider:
+  name: aws
+  runtime: python3.11
+  region: us-east-1
+  timeout: 300
+  memorySize: 1024
+  environment:
+    PYTHONPATH: /var/runtime:/opt/python
+  
+functions:
+  convertDocument:
+    handler: main.lambda_handler
+    events:
+      - http:
+          path: /{proxy+}
+          method: ANY
+          cors: true
+      - http:
+          path: /
+          method: ANY
+          cors: true
+
+plugins:
+  - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+    dockerizePip: true
+    requirementsFile: lambda_requirements.txt
