@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  markitdown-service:
+    build: .
+    ports:
+      - "7000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+    networks:
+      - gptalk
+
+# If you need to create a custom network
+networks:
+  gptalk:
+    name: gptalk
+    external: true

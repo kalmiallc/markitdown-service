@@ -23,8 +23,21 @@ async def convert_with_timeout(file_path: str, timeout: int = CONVERSION_TIMEOUT
     
     def convert_sync():
         """Synchronous conversion function to run in thread pool"""
-        # md_converter = MarkItDown(llm_client=client, llm_model="gpt-4o")
-        md_converter = MarkItDown()
+        # If OPEN_AI_BASE_URL is provided, configure a custom OpenAI client and model
+        base_url = os.getenv("OPEN_AI_BASE_URL", "").strip()
+        if base_url:
+            api_key = os.getenv("OPEN_AI_API_KEY", "").strip()
+            model = os.getenv("OPEN_AI_MODEL", "").strip() or None
+            try:
+                client = OpenAI(base_url=base_url, api_key=api_key)
+                logger.info("Using custom OpenAI client for MarkItDown conversion (base_url provided)")
+                md_converter = MarkItDown(llm_client=client, llm_model=model)
+            except Exception as e:
+                logger.warning(f"Failed to initialize custom OpenAI client, falling back to default MarkItDown: {e}")
+                md_converter = MarkItDown()
+        else:
+            # Default behavior without custom LLM client
+            md_converter = MarkItDown()
         result = md_converter.convert(file_path)
         return result.text_content
     
