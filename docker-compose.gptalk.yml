@@ -1,9 +1,7 @@
-version: '3.8'
-
 services:
   markitdown-service:
     build: .
-    container_name: ${NETWORK_NAME:-murai-markitdown}
+    container_name: murai-markitdown
     pull_policy: build
     ports:
       - "7000:8000"
@@ -11,10 +9,10 @@ services:
       - PYTHONUNBUFFERED=1
     restart: unless-stopped
     networks:
-      - ${NETWORK_NAME:-gptalk}
+      - markitdown-network
 
 # If you need to create a custom network
 networks:
-  gptalk:
+  markitdown-network:
     name: ${NETWORK_NAME:-gptalk}
     external: true
